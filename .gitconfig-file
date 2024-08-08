@@ -1,0 +1,24 @@
+[core]
+	excludesfile = /Users/marriagav/.gitignore
+	autocrlf = input
+	pager = delta
+
+[user]
+	name = Miguel Arriaga Velasco
+	email = marriagav3@gmail.com
+
+[push]
+	autoSetupRemote = true
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true    # use n and N to move between diff sections
+    side-by-side = true
+
+[merge]
+    conflictstyle = diff3
+
+[diff]
+    colorMoved = default
