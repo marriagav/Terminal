@@ -7,6 +7,6 @@ fi
 
 file_name=$(echo "$1" | tr ' ' '-')
 formatted_file_name=${file_name}.md
-cd "/Users/marriagav/Documents/Obsidian/" || exit
+cd "/Users/marriagav/Library/Mobile Documents/iCloud~md~obsidian/Documents/Miguel/" || exit
 touch "notes/${formatted_file_name}"
 nvim "notes/${formatted_file_name}"
