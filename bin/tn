@@ -1,11 +1,14 @@
 #!/bin/zsh
 
-if [ -z "$1" ]; then
-  echo "Error: A task id must be set, e.g. on 1"
-  exit 1
+if [[ $1 =~ ^[0-9]+$ ]]; then
+  # $1 is a task ID
+  task_id=$1
+else
+  # $1 is a task name
+  task_id=$(task -g "$1" | awk 'NR==4 {print $1}')
+  echo "Task ID: $task_id"
 fi
 
-task_id=$(echo "$1" | tr ' ' '-')
 task=$(task $task_id)
 
 base_dir="/Users/marriagav/Library/Mobile Documents/iCloud~md~obsidian/Documents/Miguel/" 
@@ -15,6 +18,7 @@ task_note=$(echo "$task" | awk '/task-note:/ {print $4}')
 if [ -n "$task_note" ]; then
   note_file=$base_dir/tasks/$task_note.md
   if [ -f "$note_file" ]; then
+    cd $base_dir || exit
     nvim $note_file
     exit 0
   fi
@@ -23,6 +27,11 @@ if [ -n "$task_note" ]; then
 fi
 
 description=$(echo "$task" | awk '/^Description/ {print $2}')
+
+if [ -z "$description" ]; then
+  echo "Error: Task not found"
+  exit 1 
+fi
 
 file_name=$(echo "task-$description" | tr ' ' '-')
 formatted_file_name=${file_name}.md
