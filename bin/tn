@@ -33,11 +33,17 @@ if [ -z "$description" ]; then
   exit 1 
 fi
 
-file_name=$(echo "task-$description" | tr ' ' '-')
-formatted_file_name=${file_name}.md
-cd $base_dir || exit
-touch tasks/$formatted_file_name
+file_name="task-$description"
+file_name_with_ext="$file_name.md"
+counter=1
 
+while [ -f "$base_dir/tasks/$file_name_with_ext" ]; do
+  file_name_with_ext="$file_name-$counter.md"
+  ((counter++))
+done
+
+cd $base_dir || exit
+touch "$base_dir/tasks/$file_name_with_ext"
 task $task_id annotate "task-note: "$file_name
 
-nvim tasks/${formatted_file_name}
+nvim "tasks/${file_name_with_ext}"
