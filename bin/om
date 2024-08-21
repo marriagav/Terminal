@@ -1,0 +1,20 @@
+#!/bin/zsh
+
+cd "/Users/marriagav/Library/Mobile Documents/iCloud~md~obsidian/Documents/Miguel/" || exit
+
+# Set the directories
+INBOX_DIR="inbox"
+NOTES_DIR="notes"
+BOOKMARKS_DIR="bookmarks"
+
+# Use rg to find files with the "bookmark" tag and move them to the bookmarks directory
+rg -l -U 'tags:\s+-\s+bookmark' "$INBOX_DIR" | xargs -I {} mv {} "$BOOKMARKS_DIR"
+
+# Use rg to find files with tags and move them to the corresponding directory
+rg -l -U 'tags:\s+-\s+[^\s]+' "$INBOX_DIR" | while read file; do
+  first_tag=$(rg -o -U 'tags:\s+-\s+[^\s]+' "$file" | awk '{printf $0} END {print ""}' | cut -d'-' -f2- | tr -d ' ')
+  mkdir -p "$NOTES_DIR/$first_tag"
+  mv "$file" "$NOTES_DIR/$first_tag"
+done
+
+echo "Done 🪷"
