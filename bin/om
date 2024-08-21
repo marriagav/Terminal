@@ -6,6 +6,7 @@ cd "/Users/marriagav/Library/Mobile Documents/iCloud~md~obsidian/Documents/Migue
 INBOX_DIR="inbox"
 NOTES_DIR="notes"
 BOOKMARKS_DIR="bookmarks"
+TASKS_DIR="tasks"
 
 # Use rg to find files with the "bookmark" tag and move them to the bookmarks directory
 rg -l -U 'tags:\s+-\s+bookmark' "$INBOX_DIR" | xargs -I {} mv {} "$BOOKMARKS_DIR"
@@ -16,5 +17,19 @@ rg -l -U 'tags:\s+-\s+[^\s]+' "$INBOX_DIR" | while read file; do
   mkdir -p "$NOTES_DIR/$first_tag"
   mv "$file" "$NOTES_DIR/$first_tag"
 done
+
+# Move completed and deleted task notes to "done" directory
+tasks=$(task)
+
+for note in "$TASKS_DIR"/*.md; do
+  note_name=${note%.md}  # Remove file extension
+  note_name=${note_name#"tasks/"}  # Remove "task/" prefix
+  if ! rg -U "task-note:\s+$note_name" <<< "$tasks" &>/dev/null; then
+    mkdir -p "$TASKS_DIR/done"
+    note_no_task=${note#"tasks/"} 
+    mv "$TASKS_DIR/$note_no_task" "$TASKS_DIR/done"
+  fi
+done
+
 
 echo "Done 🪷"
