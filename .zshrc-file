@@ -8,8 +8,6 @@ export PATH="/Users/marriagav/Library/Python/3.9/bin:$PATH"
 
 export PATH="/Users/marriagav/Documents/Tools/Terminal/bin:$PATH"
 
-export PATH="/opt/homebrew/opt/task@2/bin:$PATH"
-
 export TASKRC="/Users/marriagav/Documents/Tools/taskrc"
 
 # Set name of the theme to load --- if set to "random", it will
@@ -102,7 +100,7 @@ source $ZSH/oh-my-zsh.sh
 # Added by Amplify CLI binary installer
 export PATH="$HOME/.amplify/bin:$PATH"
 
-export CONDA_AUTO_ACTIVATE_BASE=false
+# export CONDA_AUTO_ACTIVATE_BASE=false
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -128,6 +126,7 @@ unset __conda_setup
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+alias tasksync="/Users/marriagav/Library/Mobile\ Documents/iCloud~com~mav~taskchamp/Documents/task/hooks/icloudsync.sh"
 
 # Set up fzf key bindings and fuzzy completions
 eval "$(fzf --zsh)"
@@ -196,3 +195,6 @@ eval $(thefuck --alias fk)
 eval "$(zoxide init zsh)"
 
 alias cd="z"
+
+# Created by `pipx` on 2024-08-12 19:43:30
+export PATH="$PATH:/Users/marriagav/.local/bin"
