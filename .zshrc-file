@@ -8,6 +8,14 @@ export PATH="/Users/marriagav/Library/Python/3.9/bin:$PATH"
 
 export PATH="/Users/marriagav/Documents/Tools/Terminal/bin:$PATH"
 
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
+
+export CARGOPATH=$HOME/.cargo
+export PATH=$PATH:$CARGOPATH/bin
+
+export PATH=~/.composer/vendor/bin:$PATH
+
 export TASKRC="/Users/marriagav/Documents/Tools/taskrc"
 
 # Set name of the theme to load --- if set to "random", it will
