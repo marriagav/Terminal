@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>AMApplicationBuild</key>
-	<string>523</string>
+	<string>526</string>
 	<key>AMApplicationVersion</key>
 	<string>2.10</string>
 	<key>AMDocumentVersion</key>
@@ -51,29 +51,28 @@
 				<key>ActionParameters</key>
 				<dict>
 					<key>source</key>
-					<string>on run {input, parameters}
-    # seem to need the full path at least in some cases
-    # -p opens files in separate tabs
-    set nvimCommand to "/opt/homebrew/bin/nvim -p "
-    
-    set filepaths to ""
-    if input is not {} then
-        repeat with currentFile in input
-            set filepaths to filepaths &amp; quoted form of POSIX path of currentFile &amp; " "
-        end repeat
-    end if
-    
-    tell application "System Events"
-        if not (exists process "iTerm") then
-            tell application "iTerm" to activate
-        end if
-    end tell
-    
-    tell application "iTerm"
-        create window with default profile command nvimCommand &amp; filepaths
-        activate
-    end tell
-end run</string>
+					<string>-- Latest: https://github.com/zeitlings/alfred-ghostty-script-- v1.0.0 - 02.01.2025-- tab : t | window: n | split: dproperty open_new : "t"property reuse_tab : falseproperty timeout_seconds : 3property shell_load_delay : 1.0 -- Delay for session to loadproperty switch_delay : 0.35 -- Delay when switching windowson isRunning()	application "Ghostty" is runningend isRunningon summon()	tell application "Ghostty" to activateend summonon hasWindows()	if not isRunning() then return false	tell application "System Events"		return exists window 1 of process "Ghostty"	end tellend hasWindowson waitForWindow(timeout_s)	set end_time to (current date) + timeout_s	repeat until hasWindows() or ((current date) &gt; end_time)		delay 0.05	end repeat	return hasWindows()end waitForWindowon handleWindow(just_activated)	if just_activated then		return	end if	set has_windows to hasWindows()	set needs_window to not has_windows	set override_reuse to (reuse_tab and not has_windows)	tell application "System Events"		if needs_window or override_reuse then			keystroke "n" using command down -- New window			return		end if		if not reuse_tab then			if open_new is "d" and has_windows then				keystroke "d" using command down -- New split right			else				keystroke open_new using command down -- New window or tab			end if		end if	end tellend handleWindowon send(a_command, just_activated)
+	if not just_activated then
+		delay switch_delay
+	end if
+	
+	set had_windows to hasWindows()
+	handleWindow(just_activated)
+
+	delay shell_load_delay
+	
+	if not waitForWindow(1) then
+		display dialog "Failed to verify window exists"
+		return
+	end if
+
+	set the clipboard to a_command -- Use clipboard to preserve spaces
+	tell application "System Events"
+		keystroke "v" using command down -- Paste instead of typing
+		keystroke return
+	end tell
+end send
+on run {input, parameters}	# seem to need the full path at least in some cases	# -p opens files in separate tabs	set nvimCommand to "/opt/homebrew/bin/nvim -p "		set filepaths to ""	if input is not {} then		repeat with currentFile in input			set filepaths to filepaths &amp; quoted form of POSIX path of currentFile &amp; " "		end repeat	end if		set just_activated to not isRunning()	summon()	if just_activated then		if not waitForWindow(timeout_seconds) then			display dialog "Failed to create initial window"			return		end if	end if	send(input, just_activated)end run</string>
 				</dict>
 				<key>BundleIdentifier</key>
 				<string>com.apple.Automator.RunScript</string>
@@ -90,15 +89,15 @@ end run</string>
 				<key>Class Name</key>
 				<string>RunScriptAction</string>
 				<key>InputUUID</key>
-				<string>5866E4FA-66B6-4A6B-AAB2-0980A73ED392</string>
+				<string>1968FC1A-D1FD-4C14-B846-96D2359070D8</string>
 				<key>Keywords</key>
 				<array>
 					<string>Run</string>
 				</array>
 				<key>OutputUUID</key>
-				<string>791249DE-80DB-4BB4-8B09-A49CD84C23E0</string>
+				<string>C051AF3A-7134-4D88-B8E0-EB991B521E5D</string>
 				<key>UUID</key>
-				<string>9C3E7EA2-7FCF-4A5C-865B-5BD6DCFA73CA</string>
+				<string>1E8012AA-C50B-444B-A35C-970404BF0706</string>
 				<key>UnlocalizedApplications</key>
 				<array>
 					<string>Automator</string>
@@ -127,7 +126,7 @@ end run</string>
 				<key>isViewVisible</key>
 				<integer>1</integer>
 				<key>location</key>
-				<string>309.000000:315.000000</string>
+				<string>470.000000:678.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run AppleScript.action/Contents/Resources/Base.lproj/main.nib</string>
 			</dict>
