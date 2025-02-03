@@ -220,3 +220,7 @@ run = "move-node-to-workspace M"
 [[on-window-detected]]
 if.app-id = 'com.apple.mail'
 run = "move-node-to-workspace M"
+
+[[on-window-detected]]
+if.app-id = 'com.mitchellh.ghostty'
+run = "move-node-to-workspace T"
